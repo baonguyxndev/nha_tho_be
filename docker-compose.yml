@@ -1,0 +1,19 @@
+services:
+  mongodb:
+    image: mongo:5.0.15
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: dbnhatho
+      MONGO_INITDB_ROOT_PASSWORD: Admin@123
+    ports:
+      - 27027:27017
+    volumes:
+      - mongodb_data_container:/data/db
+
+volumes:
+  mongodb_data_container:
+
+    # SET UP DOCKER COMPOSE
+    # docker compose -p dbnhatho up -d
+
+    # LINK CONNECT MONGODB COMPASS
+    # mongodb://dbnhatho:Admin%40123@localhost:27027/dbnhatho?authSource=admin
