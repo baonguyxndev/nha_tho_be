@@ -1,5 +1,5 @@
 import { BooksController } from '@/controllers/books.controller/books.controller';
-import { Book, BookSchema } from '@/schemas/books.schema/book.schema';
+import { Book, BookSchema } from '@/schemas/book.schema';
 import { BooksService } from '@/servers/books.server/books.service';
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';

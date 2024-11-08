@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { MinistryYearsController } from './ministry-years.controller';
-import { MinistryYearsService } from './ministry-years.service';
+import { MinistryYearsService } from '@/servers/ministry-years.server/ministry-years.service';
 
 describe('MinistryYearsController', () => {
   let controller: MinistryYearsController;

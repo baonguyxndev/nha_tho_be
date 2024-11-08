@@ -26,7 +26,7 @@ export class Admin {
     @Prop()
     image: string;
 
-    @Prop({ default: 'EmployeeS' })
+    @Prop({ default: 'NONE' })
     role: string;
 
     @Prop({ default: 'LOCAL' })
