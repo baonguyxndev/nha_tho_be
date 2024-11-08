@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { BibleVersionsController } from './bible-versions.controller';
-import { BibleVersionsService } from './bible-versions.service';
+import { BibleVersionsService } from '@/servers/bible-versions.server/bible-versions.service';
 
 describe('BibleVersionsController', () => {
   let controller: BibleVersionsController;

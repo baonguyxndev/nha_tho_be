@@ -1,5 +1,5 @@
 import { NewsController } from '@/controllers/news.controller/news.controller';
-import { News, NewsSchema } from '@/schemas/news.schema/news.schema';
+import { News, NewsSchema } from '@/schemas/news.schema';
 import { NewsService } from '@/servers/news.server/news.service';
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';

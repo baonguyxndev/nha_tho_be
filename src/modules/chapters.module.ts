@@ -1,5 +1,5 @@
 import { ChaptersController } from '@/controllers/chapters.controller/chapters.controller';
-import { Chapter, ChapterSchema } from '@/schemas/chapters.schema/chapter.schema';
+import { Chapter, ChapterSchema } from '@/schemas/chapter.schema';
 import { ChaptersService } from '@/servers/chapters.server/chapters.service';
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
