@@ -9,13 +9,13 @@ export class MinistryYear {
     id: string;
 
     @Prop()
-    nameYear: string;
+    name: string;
 
     @Prop()
-    desYear: string;
+    desc: string;
 
     @Prop()
-    cateYearId: string;
+    cateId: string;
 }
 
 export const MinistryYearSchema = SchemaFactory.createForClass(MinistryYear);

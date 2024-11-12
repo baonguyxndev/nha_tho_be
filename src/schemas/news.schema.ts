@@ -9,10 +9,10 @@ export class News {
     id: string;
 
     @Prop()
-    newsTitle: string;
+    title: string;
 
     @Prop()
-    newsDesc: string;
+    desc: string;
 
     @Prop()
     ministryYearId: string;
@@ -21,7 +21,7 @@ export class News {
     cateId: string;
 
     @Prop()
-    mainImage: string;
+    mainImg: string;
 
 }
 

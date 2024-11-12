@@ -12,10 +12,10 @@ export class Verse {
     chapterId: string;
 
     @Prop()
-    verseNumber: number;
+    number: number;
 
     @Prop()
-    verseText: string;
+    desc: string;
 }
 
 export const VerseSchema = SchemaFactory.createForClass(Verse);

@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { CreateChapterDto } from '../../dtoes/chapters.dto/create-chapter.dto';
 import { UpdateChapterDto } from '../../dtoes/chapters.dto/update-chapter.dto';
 import { ChaptersService } from '@/servers/chapters.server/chapters.service';
@@ -13,8 +13,11 @@ export class ChaptersController {
   }
 
   @Get()
-  findAll() {
-    return this.chaptersService.findAll();
+  async findAll(@Query() query: string,
+    @Query("current") current: string,
+    @Query("pageSize") pageSize: string
+  ) {
+    return this.chaptersService.findAll(query, +current, +pageSize);
   }
 
   @Get(':id')

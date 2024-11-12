@@ -10,10 +10,10 @@ export class Chapter {
     id: string;
 
     @Prop()
-    bookId: string;
+    number: number;
 
     @Prop()
-    chapterNumber: number;
+    bookId: string;
 
 }
 

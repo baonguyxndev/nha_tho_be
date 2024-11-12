@@ -1,7 +1,7 @@
 import { CreateBookDto } from '@/dtoes/books.dto/create-book.dto';
 import { UpdateBookDto } from '@/dtoes/books.dto/update-book.dto';
 import { BooksService } from '@/servers/books.server/books.service';
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 
 
 @Controller('books')
@@ -14,8 +14,11 @@ export class BooksController {
   }
 
   @Get()
-  findAll() {
-    return this.booksService.findAll();
+  async findAll(@Query() query: string,
+    @Query("current") current: string,
+    @Query("pageSize") pageSize: string
+  ) {
+    return this.booksService.findAll(query, +current, +pageSize);
   }
 
   @Get(':id')

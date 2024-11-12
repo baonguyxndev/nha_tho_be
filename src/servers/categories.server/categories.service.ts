@@ -1,15 +1,50 @@
 import { Injectable } from '@nestjs/common';
 import { CreateCategoryDto } from '../../dtoes/categories.dto/create-category.dto';
 import { UpdateCategoryDto } from '../../dtoes/categories.dto/update-category.dto';
+import { InjectModel } from '@nestjs/mongoose';
+import { Category } from '@/schemas/category.schema';
+import { Model } from 'mongoose';
+import aqp from 'api-query-params';
 
 @Injectable()
 export class CategoriesService {
-  create(createCategoryDto: CreateCategoryDto) {
-    return 'This action adds a new category';
+  constructor(@InjectModel(Category.name) private categoriesModule: Model<Category>) { }
+
+  async create(createCategoryDto: CreateCategoryDto) {
+    const { name } = createCategoryDto;
+
+    const category = await this.categoriesModule.create({
+      name
+    })
+    return {
+      _id: category._id
+    }
   }
 
-  findAll() {
-    return `This action returns all categories`;
+  async findAll(query: string, current: number, pageSize: number) {
+    const { filter, sort } = aqp(query)
+
+    if (filter.current)
+      delete filter.current;
+    if (filter.pageSize)
+      delete filter.pageSize;
+
+    if (!current)
+      current = 1;
+    if (!pageSize)
+      pageSize = 10;
+
+    const totalItems = (await this.categoriesModule.find(filter)).length;
+    const totalPages = Math.ceil(totalItems / pageSize);
+    const skip = (+current - 1) * (+pageSize);
+
+    const results = await this.categoriesModule
+      .find(filter)
+      .limit(pageSize)
+      .skip(skip)
+      .sort(sort as any);
+
+    return { results, totalPages };
   }
 
   findOne(id: number) {
