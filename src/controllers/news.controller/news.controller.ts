@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 
 import { CreateNewsDto } from '../../dtoes/news.dto/create-news.dto';
 import { UpdateNewsDto } from '../../dtoes/news.dto/update-news.dto';
@@ -14,8 +14,11 @@ export class NewsController {
   }
 
   @Get()
-  findAll() {
-    return this.newsService.findAll();
+  async findAll(@Query() query: string,
+    @Query("current") current: string,
+    @Query("pageSize") pageSize: string
+  ) {
+    return this.newsService.findAll(query, +current, +pageSize);
   }
 
   @Get(':id')

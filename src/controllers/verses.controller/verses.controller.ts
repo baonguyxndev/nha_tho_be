@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { CreateVerseDto } from '../../dtoes/verses.dto/create-verse.dto';
 import { UpdateVerseDto } from '../../dtoes/verses.dto/update-verse.dto';
 import { VersesService } from '@/servers/verses.server/verses.service';
@@ -13,8 +13,11 @@ export class VersesController {
   }
 
   @Get()
-  findAll() {
-    return this.versesService.findAll();
+  async findAll(@Query() query: string,
+    @Query("current") current: string,
+    @Query("pageSize") pageSize: string
+  ) {
+    return this.versesService.findAll(query, +current, +pageSize);
   }
 
   @Get(':id')

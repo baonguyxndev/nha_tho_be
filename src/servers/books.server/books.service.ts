@@ -1,16 +1,52 @@
 import { CreateBookDto } from '@/dtoes/books.dto/create-book.dto';
 import { UpdateBookDto } from '@/dtoes/books.dto/update-book.dto';
+import { BooksModule } from '@/modules/books.module';
+import { Book } from '@/schemas/book.schema';
 import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import aqp from 'api-query-params';
+import { Model } from 'mongoose';
 
 
 @Injectable()
 export class BooksService {
-  create(createBookDto: CreateBookDto) {
-    return 'This action adds a new book';
+  constructor(@InjectModel(Book.name) private bookModule: Model<Book>) { }
+
+  async create(createBookDto: CreateBookDto) {
+    const { name, bibleVerionId } = createBookDto;
+
+    const book = await this.bookModule.create({
+      name, bibleVerionId
+    })
+    return {
+      _id: book._id
+    }
   }
 
-  findAll() {
-    return `This action returns all books`;
+  async findAll(query: string, current: number, pageSize: number) {
+    const { filter, sort } = aqp(query)
+
+    if (filter.current)
+      delete filter.current;
+    if (filter.pageSize)
+      delete filter.pageSize;
+
+    if (!current)
+      current = 1;
+    if (!pageSize)
+      pageSize = 10;
+
+    const totalItems = (await this.bookModule.find(filter)).length;
+    const totalPages = Math.ceil(totalItems / pageSize);
+    const skip = (+current - 1) * (+pageSize);
+
+    const results = await this.bookModule
+      .find(filter)
+      .limit(pageSize)
+      .skip(skip)
+      .sort(sort as any);
+
+    return { results, totalPages };
   }
 
   findOne(id: number) {
@@ -25,3 +61,4 @@ export class BooksService {
     return `This action removes a #${id} book`;
   }
 }
+

@@ -1,9 +1,9 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { CreateMinistryYearDto } from '@/dtoes/ministry-years.dto/create-ministry-year.dto';
 import { UpdateMinistryYearDto } from '@/dtoes/ministry-years.dto/update-ministry-year.dto';
 import { MinistryYearsService } from '@/servers/ministry-years.server/ministry-years.service';
 
-@Controller('ministry-years')
+@Controller('ministryYears')
 export class MinistryYearsController {
   constructor(private readonly ministryYearsService: MinistryYearsService) { }
 
@@ -13,8 +13,11 @@ export class MinistryYearsController {
   }
 
   @Get()
-  findAll() {
-    return this.ministryYearsService.findAll();
+  async findAll(@Query() query: string,
+    @Query("current") current: string,
+    @Query("pageSize") pageSize: string
+  ) {
+    return this.ministryYearsService.findAll(query, +current, +pageSize);
   }
 
   @Get(':id')

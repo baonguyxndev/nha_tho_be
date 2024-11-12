@@ -9,11 +9,11 @@ export class Book {
     @Prop()
     id: string;
 
-    @Prop()
+    @Prop({ default: "NULL" })
     bibleVersionId: string
 
     @Prop()
-    bookName: string
+    name: string
 }
 
 export const BookSchema = SchemaFactory.createForClass(Book);

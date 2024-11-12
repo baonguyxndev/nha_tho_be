@@ -2,7 +2,6 @@ import { CreateAdminDto } from '@/dtoes/admin.dto/create-admin.dto';
 import { UpdateAdminDto } from '@/dtoes/admin.dto/update-admin.dto';
 import { AdminService } from '@/servers/admin.server/admin.service';
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
-import { query } from 'express';
 
 
 @Controller('admin')
@@ -19,7 +18,7 @@ export class AdminController {
     @Query("current") current: string,
     @Query("pageSize") pageSize: string
   ) {
-    return this.adminService.findAll(query, current, pageSize);
+    return this.adminService.findAll(query, +current, +pageSize);
   }
 
   @Get(':id')

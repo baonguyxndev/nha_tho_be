@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { CreateBibleVersionDto } from '../../dtoes/bible-versions.dto/create-bible-version.dto';
 import { UpdateBibleVersionDto } from '../../dtoes/bible-versions.dto/update-bible-version.dto';
 import { BibleVersionsService } from '@/servers/bible-versions.server/bible-versions.service';
@@ -13,8 +13,11 @@ export class BibleVersionsController {
   }
 
   @Get()
-  findAll() {
-    return this.bibleVersionsService.findAll();
+  async findAll(@Query() query: string,
+    @Query("current") current: string,
+    @Query("pageSize") pageSize: string
+  ) {
+    return this.bibleVersionsService.findAll(query, +current, +pageSize);
   }
 
   @Get(':id')

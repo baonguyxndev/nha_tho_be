@@ -1,13 +1,13 @@
-import { NewImagesController } from '@/controllers/new-images.controller/new-images.controller';
-import { NewImage, NewImageSchema } from '@/schemas/new-image.schema';
-import { NewImagesService } from '@/servers/new-images.server/new-images.service';
+import { NewsImagesController } from '@/controllers/new-images.controller/new-images.controller';
+import { NewsImage, NewImageSchema } from '@/schemas/new-image.schema';
+import { NewsImagesService } from '@/servers/new-images.server/new-images.service';
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 
 
 @Module({
-  imports: [MongooseModule.forFeature([{ name: NewImage.name, schema: NewImageSchema }])],
-  controllers: [NewImagesController],
-  providers: [NewImagesService],
+  imports: [MongooseModule.forFeature([{ name: NewsImage.name, schema: NewImageSchema }])],
+  controllers: [NewsImagesController],
+  providers: [NewsImagesService],
 })
 export class NewImagesModule { }

@@ -1,34 +1,37 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { CreateNewImageDto } from '../../dtoes/new-images.dto/create-new-image.dto';
-import { UpdateNewImageDto } from '../../dtoes/new-images.dto/update-new-image.dto';
-import { NewImagesService } from '@/servers/new-images.server/new-images.service';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
+import { CreateNewsImageDto } from '../../dtoes/new-images.dto/create-new-image.dto';
+import { UpdateNewsImageDto } from '../../dtoes/new-images.dto/update-new-image.dto';
+import { NewsImagesService } from '@/servers/new-images.server/new-images.service';
 
-@Controller('new-images')
-export class NewImagesController {
-  constructor(private readonly newImagesService: NewImagesService) { }
+@Controller('newsImages')
+export class NewsImagesController {
+  constructor(private readonly newsImagesService: NewsImagesService) { }
 
   @Post()
-  create(@Body() createNewImageDto: CreateNewImageDto) {
-    return this.newImagesService.create(createNewImageDto);
+  create(@Body() createNewsImageDto: CreateNewsImageDto) {
+    return this.newsImagesService.create(createNewsImageDto);
   }
 
   @Get()
-  findAll() {
-    return this.newImagesService.findAll();
+  async findAll(@Query() query: string,
+    @Query("current") current: string,
+    @Query("pageSize") pageSize: string
+  ) {
+    return this.newsImagesService.findAll(query, +current, +pageSize);
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.newImagesService.findOne(+id);
+    return this.newsImagesService.findOne(+id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateNewImageDto: UpdateNewImageDto) {
-    return this.newImagesService.update(+id, updateNewImageDto);
+  update(@Param('id') id: string, @Body() updateNewImageDto: UpdateNewsImageDto) {
+    return this.newsImagesService.update(+id, updateNewImageDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.newImagesService.remove(+id);
+    return this.newsImagesService.remove(+id);
   }
 }
