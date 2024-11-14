@@ -1,4 +1,3 @@
-import { IsEmail } from 'class-validator';
 import { CreateAdminDto } from '@/modules/admin/dto/create-admin.dto';
 import { UpdateAdminDto } from '@/modules/admin/dto/update-admin.dto';
 import { hashPasswordHelper } from '@/helpers/util';
@@ -7,11 +6,16 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import mongoose, { Model } from 'mongoose';
 import aqp from 'api-query-params';
+import dayjs from 'dayjs';
+import { v4 as uuidv4 } from 'uuid';
+
 
 
 @Injectable()
 export class AdminService {
-  constructor(@InjectModel(Admin.name) private adminModule: Model<Admin>) { }
+  constructor(
+    @InjectModel(Admin.name) private adminModule: Model<Admin>,
+  ) { }
 
   isEmailExist = async (email: string) => {
     const admin = await this.adminModule.exists({ email })
@@ -66,8 +70,8 @@ export class AdminService {
     return { results, totalPages };
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} admin`;
+  async findByEmail(email: string) {
+    return await this.adminModule.findOne({ email })
   }
 
   async update(updateAdminDto: UpdateAdminDto) {
@@ -85,6 +89,31 @@ export class AdminService {
     } else {
       throw new BadRequestException("Id không đúng định dạng mongodb")
     }
-
   }
+
+  async handleRegister(registerDto: CreateAdminDto) {
+    const { email, password, name } = registerDto;
+    //check email
+    const isExis = await this.isEmailExist(email);
+    if (isExis) {
+      throw new BadRequestException(`email của bạn đã được đăng kí. Vui lòng sử dụng email khác!!!`)
+    }
+
+    //hash Password
+    const hashPassword = await hashPasswordHelper(password);
+    const codeId = uuidv4();
+    const admin = await this.adminModule.create({
+      email, password: hashPassword, name,
+      isActive: false,
+      codeId: codeId,
+      codeExpired: dayjs().add(5, 'minutes')
+    })
+    //trả phản hồi
+    return {
+      _id: admin._id
+    }
+  }
+
 }
+
+

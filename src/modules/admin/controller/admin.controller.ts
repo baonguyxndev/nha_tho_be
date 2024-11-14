@@ -21,11 +21,6 @@ export class AdminController {
     return this.adminService.findAll(query, +current, +pageSize);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.adminService.findOne(+id);
-  }
-
   @Patch()
   update(@Body() updateAdminDto: UpdateAdminDto) {
     return this.adminService.update(updateAdminDto);
