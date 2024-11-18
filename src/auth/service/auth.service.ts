@@ -1,9 +1,7 @@
-
 import { comparePasswordHelper } from '@/helpers/util';
 import { AdminService } from '@/modules/admin/service/admin.service';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { access } from 'fs';
 
 @Injectable()
 export class AuthService {
@@ -12,14 +10,20 @@ export class AuthService {
     private jwtService: JwtService,
   ) { }
 
-  async login(email: string, password: string): Promise<any> {
+
+  async validateAdmin(email: string, password: string): Promise<any> {
     const admin = await this.adminService.findByEmail(email);
     const isValidPassword = comparePasswordHelper(password, admin.password);
-    if (!isValidPassword)
-      throw new UnauthorizedException("Email/Password không hợp lệ");
-    const payload = { sub: admin._id, email: admin.email };
+    if (!admin || !isValidPassword)
+      return null;
+    return admin;
+  }
+
+  async login(admin: any) {
+    const payload = { email: admin.email, sub: admin._id };
+    console.log('Payload for JWT:', payload); // Log để kiểm tra payload
     return {
-      accessToken: await this.jwtService.signAsync(payload)
+      access_token: this.jwtService.sign(payload),
     }
   }
 }
