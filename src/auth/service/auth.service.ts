@@ -11,16 +11,16 @@ export class AuthService {
   ) { }
 
 
-  async validateAdmin(email: string, password: string): Promise<any> {
-    const admin = await this.adminService.findByEmail(email);
-    const isValidPassword = comparePasswordHelper(password, admin.password);
-    if (!admin || !isValidPassword)
+  async validateUser(email: string, password: string): Promise<any> {
+    const user = await this.adminService.findByEmail(email);
+    const isValidPassword = await comparePasswordHelper(password, user.password);
+    if (!user || !isValidPassword)
       return null;
-    return admin;
+    return user;
   }
 
-  async login(admin: any) {
-    const payload = { email: admin.email, sub: admin._id };
+  async login(user: any) {
+    const payload = { email: user.email, sub: user._id };
     console.log('Payload for JWT:', payload); // Log để kiểm tra payload
     return {
       access_token: this.jwtService.sign(payload),
