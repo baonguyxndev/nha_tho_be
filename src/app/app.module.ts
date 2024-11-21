@@ -11,14 +11,16 @@ import { NewsModule } from '@/modules/news/module/news.module';
 import { VersesModule } from '@/modules/verse/module/verses.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
-import { AdminModule } from '@/modules/admin/module/admin.module';
 import { AuthModule } from '@/auth/module/auth.module';
+import { APP_GUARD } from '@nestjs/core';
+import { JwtAuthGuard } from '@/middleware/passport/jwt-auth.guard';
+import { UsersModule } from '@/modules/users/module/users.module';
 
 
 @Module({
   imports: [
     CategoriesModule,
-    AdminModule,
+    UsersModule,
     BibleVersionsModule,
     BooksModule,
     CategoriesModule,
@@ -38,6 +40,12 @@ import { AuthModule } from '@/auth/module/auth.module';
     AuthModule
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    }
+  ],
 })
 export class AppModule { }

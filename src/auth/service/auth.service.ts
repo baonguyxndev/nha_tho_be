@@ -1,18 +1,19 @@
 import { comparePasswordHelper } from '@/helpers/util';
-import { AdminService } from '@/modules/admin/service/admin.service';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { CreateAuthDto } from '../dto/create-auth.dto';
+import { UsersService } from '@/modules/users/service/users.service';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private adminService: AdminService,
+    private userService: UsersService,
     private jwtService: JwtService,
   ) { }
 
 
   async validateUser(email: string, password: string): Promise<any> {
-    const user = await this.adminService.findByEmail(email);
+    const user = await this.userService.findByEmail(email);
     const isValidPassword = await comparePasswordHelper(password, user.password);
     if (!user || !isValidPassword)
       return null;
@@ -25,5 +26,9 @@ export class AuthService {
     return {
       access_token: this.jwtService.sign(payload),
     }
+  }
+
+  handleRegister = async (registerDto: CreateAuthDto) => {
+    return await this.userService.handleRegister(registerDto)
   }
 }
