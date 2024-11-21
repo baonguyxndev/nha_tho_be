@@ -1,26 +1,41 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Request } from '@nestjs/common';
-import { CreateAuthDto } from '../dto/create-auth.dto';
-
-import { AuthService } from '../service/auth.service';
-import { AuthGuard } from '@nestjs/passport';
-import { JwtAuthGuard } from '@/middleware/passport/jwt-auth.guard';
+import { Body, Controller, Get, Post, Request, UseGuards } from '@nestjs/common';
 import { LocalAuthGuard } from '@/middleware/passport/local.auth.guard';
+import { AuthService } from '../service/auth.service';
+import { Public } from '@/decorator/customize';
+import { CreateAuthDto } from '../dto/create-auth.dto';
+import { MailerService } from '@nestjs-modules/mailer';
+
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) { }
+  constructor(
+    private readonly authService: AuthService,
+    private readonly mailerService: MailerService
+  ) { }
 
   @Post("login")
+  @Public()
   @UseGuards(LocalAuthGuard)
-  create(@Request() req) {
-    return this.authService.login(req.admin);
+  handleLogin(@Request() req) {
+    return this.authService.login(req.user);
   }
 
-
-  @UseGuards(JwtAuthGuard)
-  @Get('profile')
-  getProfile(@Request() req) {
-    return req.admin;
+  @Post('register')
+  @Public()
+  register(@Body() registerDto: CreateAuthDto) {
+    return this.authService.handleRegister(registerDto);
   }
 
+  @Get('mail')
+  @Public()
+  sendEmail() {
+    this.mailerService
+      .sendMail({
+        to: 'baonguyxndev@gmail.com', // list of receivers
+        subject: 'Testing Nest MailerModule ✔', // Subject line
+        text: 'welcome', // plaintext body
+        html: '<b>test send email</b>'
+      })
+    return "ok"
+  }
 }
