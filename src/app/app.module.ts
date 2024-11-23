@@ -60,13 +60,13 @@ import { MailerModule } from '@nestjs-modules/mailer';
           from: '"Giáo Xứ Tân Trang" <no-reply@giaoxutantrang@gmail.com>',
         },
         // preview: true,
-        // template: {
-        //   dir: process.cwd() + '/src/mail/templates/',
-        //   adapter: new HandlebarsAdapter(),
-        //   options: {
-        //     strict: true,
-        //   },
-        // },
+        template: {
+          dir: process.cwd() + '/src/mail/templates/',
+          adapter: new HandlebarsAdapter(),
+          options: {
+            strict: true,
+          },
+        },
       }),
       inject: [ConfigService],
     }),
