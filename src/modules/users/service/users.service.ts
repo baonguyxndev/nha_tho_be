@@ -9,6 +9,7 @@ import aqp from 'api-query-params';
 import { CreateAuthDto } from '@/auth/dto/create-auth.dto';
 import { v4 as uuidv4 } from 'uuid';
 import dayjs from 'dayjs';
+import { MailerService } from '@nestjs-modules/mailer';
 
 
 @Injectable()
@@ -16,7 +17,7 @@ export class UsersService {
 
   constructor(
     @InjectModel(User.name) private userModel: Model<User>,
-
+    private readonly mailerService: MailerService
   ) { }
 
   isEmailExist = async (email: string) => {
@@ -122,7 +123,15 @@ export class UsersService {
     })
 
     //send email
-
+    this.mailerService.sendMail({
+      to: user.email, // list of receivers
+      subject: 'Xác thực email ✔', // Subject line
+      template: "register",
+      context: {
+        name: user.name ?? user.email,
+        activationCode: codeId
+      }
+    })
 
     //trả phản hồi
     return {
