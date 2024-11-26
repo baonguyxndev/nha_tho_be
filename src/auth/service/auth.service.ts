@@ -4,6 +4,7 @@ import { JwtService } from '@nestjs/jwt';
 import { CreateAuthDto } from '../dto/create-auth.dto';
 import { UsersService } from '@/modules/users/service/users.service';
 import { CodeAuthDto } from '../dto/code-auth-dto';
+import { ChangePasswordAuthDto } from '../dto/change-password-dto';
 
 @Injectable()
 export class AuthService {
@@ -45,5 +46,13 @@ export class AuthService {
 
   retryActive = async (data: string) => {
     return await this.userService.retryActive(data)
+  }
+
+  changePassword = async (data: ChangePasswordAuthDto) => {
+    return await this.userService.changePassword(data)
+  }
+
+  forgotPassword = async (data: string) => {
+    return await this.userService.forgotPassword(data)
   }
 }
