@@ -14,22 +14,23 @@ export class AuthService {
 
   async validateUser(email: string, password: string): Promise<any> {
     const user = await this.userService.findByEmail(email);
+    if (!user)
+      return null;
     const isValidPassword = await comparePasswordHelper(password, user.password);
-    if (!user || !isValidPassword)
+    if (!isValidPassword)
       return null;
     return user;
   }
 
   async login(user: any) {
     const payload = { email: user.email, sub: user._id };
-    console.log('Payload for JWT:', payload); // Log để kiểm tra payload
     return {
       user: {
         email: user.email,
         _id: user._id,
         name: user.name
       },
-      access_token: this.jwtService.sign(payload),
+      accessToken: this.jwtService.sign(payload),
     }
   }
 
