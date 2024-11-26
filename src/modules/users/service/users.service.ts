@@ -10,6 +10,7 @@ import { CreateAuthDto } from '@/auth/dto/create-auth.dto';
 import { v4 as uuidv4 } from 'uuid';
 import dayjs from 'dayjs';
 import { MailerService } from '@nestjs-modules/mailer';
+import { CodeAuthDto } from '@/auth/dto/code-auth-dto';
 
 
 @Injectable()
@@ -136,6 +137,29 @@ export class UsersService {
     //trả phản hồi
     return {
       _id: user._id
+    }
+  }
+
+  async handleActive(data: CodeAuthDto) {
+    const user = await this.userModel.findOne({
+      _id: data._id,
+      codeId: data.code
+    })
+    if (!user) {
+      throw new BadRequestException("Mã kích hoạt sai hoặc đã hết hạn !!!")
+    }
+
+    //check expire code
+    const isBeforeCheck = dayjs().isBefore(user.codeExpired);
+    if (isBeforeCheck) {
+      //valid => update isActive -> true
+      await this.userModel.updateOne({ _id: data._id }, {
+        isActive: true
+      })
+      return { isBeforeCheck }
+    }
+    else {
+      throw new BadRequestException("Mã kích hoạt đã hết hạn")
     }
   }
 } 
