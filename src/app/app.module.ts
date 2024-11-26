@@ -6,7 +6,6 @@ import { BooksModule } from '@/modules/book/module/books.module';
 import { CategoriesModule } from '@/modules/category/module/categories.module';
 import { ChaptersModule } from '@/modules/chapter/module/chapters.module';
 import { MinistryYearsModule } from '@/modules/ministry-year/module/ministry-years.module';
-import { NewImagesModule } from '@/modules/news-image/module/new-images.module';
 import { NewsModule } from '@/modules/news/module/news.module';
 import { VersesModule } from '@/modules/verse/module/verses.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
@@ -30,7 +29,6 @@ import { MailerModule } from '@nestjs-modules/mailer';
     ChaptersModule,
     MinistryYearsModule,
     NewsModule,
-    NewImagesModule,
     VersesModule,
     AuthModule,
     ConfigModule.forRoot({ isGlobal: true }),

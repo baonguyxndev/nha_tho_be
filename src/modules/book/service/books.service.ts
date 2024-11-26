@@ -1,8 +1,8 @@
 import { Book } from '@/modules/book/schema/book.schema';
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import aqp from 'api-query-params';
-import { Model } from 'mongoose';
+import mongoose, { Model } from 'mongoose';
 import { CreateBookDto } from '../dto/create-book.dto';
 import { UpdateBookDto } from '../dto/update-book.dto';
 
@@ -52,12 +52,20 @@ export class BooksService {
     return `This action returns a #${id} book`;
   }
 
-  update(id: number, updateBookDto: UpdateBookDto) {
-    return `This action updates a #${id} book`;
+  async update(updateBookDto: UpdateBookDto) {
+    return await this.bookModule.updateOne(
+      { _id: updateBookDto._id }, { ...updateBookDto });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} book`;
+  async remove(_id: string) {
+    //check id
+    if (mongoose.isValidObjectId(_id)) {
+      //detele
+      return this.bookModule.deleteOne({ _id })
+    }
+    else {
+      throw new BadRequestException("id không đúng định dạng mongodb")
+    }
   }
 }
 

@@ -1,19 +1,19 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import aqp from 'api-query-params';
 import { InjectModel } from '@nestjs/mongoose';
 import { News } from '@/modules/news/schema/news.schema';
-import { Model } from 'mongoose';
+import mongoose, { Model } from 'mongoose';
 import { CreateNewsDto } from '../dto/create-news.dto';
 import { UpdateNewsDto } from '../dto/update-news.dto';
 
 @Injectable()
 export class NewsService {
-  constructor(@InjectModel(News.name) private ministryYearsModule: Model<News>) { }
+  constructor(@InjectModel(News.name) private newsModule: Model<News>) { }
 
   async create(createNewsDto: CreateNewsDto) {
     const { title, desc, ministryYearId, cateId, mainImg } = createNewsDto;
 
-    const news = await this.ministryYearsModule.create({
+    const news = await this.newsModule.create({
       title, desc, ministryYearId, cateId, mainImg
     })
     return {
@@ -34,11 +34,11 @@ export class NewsService {
     if (!pageSize)
       pageSize = 10;
 
-    const totalItems = (await this.ministryYearsModule.find(filter)).length;
+    const totalItems = (await this.newsModule.find(filter)).length;
     const totalPages = Math.ceil(totalItems / pageSize);
     const skip = (+current - 1) * (+pageSize);
 
-    const results = await this.ministryYearsModule
+    const results = await this.newsModule
       .find(filter)
       .limit(pageSize)
       .skip(skip)
@@ -51,11 +51,19 @@ export class NewsService {
     return `This action returns a #${id} news`;
   }
 
-  update(id: number, updateNewsDto: UpdateNewsDto) {
-    return `This action updates a #${id} news`;
+  async update(updateNewsDto: UpdateNewsDto) {
+    return await this.newsModule.updateOne(
+      { _id: updateNewsDto._id }, { ...updateNewsDto });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} news`;
+  async remove(_id: string) {
+    //check id
+    if (mongoose.isValidObjectId(_id)) {
+      //detele
+      return this.newsModule.deleteOne({ _id })
+    }
+    else {
+      throw new BadRequestException("id không đúng định dạng mongodb")
+    }
   }
 }

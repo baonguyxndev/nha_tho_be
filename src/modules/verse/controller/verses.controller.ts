@@ -25,13 +25,13 @@ export class VersesController {
     return this.versesService.findOne(+id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateVerseDto: UpdateVerseDto) {
-    return this.versesService.update(+id, updateVerseDto);
+  @Patch()
+  update(@Body() updateVerseDto: UpdateVerseDto) {
+    return this.versesService.update(updateVerseDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.versesService.remove(+id);
+    return this.versesService.remove(id);
   }
 }

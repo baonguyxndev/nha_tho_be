@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import mongoose, { Model } from 'mongoose';
 import { BibleVersion } from '@/modules/bible-version/schema/bible-version.schema';
 import aqp from 'api-query-params';
 import { CreateBibleVersionDto } from '../dto/create-bible-version.dto';
@@ -52,11 +52,19 @@ export class BibleVersionsService {
     return `This action returns a #${id} bibleVersion`;
   }
 
-  update(id: number, updateBibleVersionDto: UpdateBibleVersionDto) {
-    return `This action updates a #${id} bibleVersion`;
+  async update(updateBibleVersionsDto: UpdateBibleVersionDto) {
+    return await this.bibleVersionModule.updateOne(
+      { _id: updateBibleVersionsDto._id }, { ...updateBibleVersionsDto });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} bibleVersion`;
+  async remove(_id: string) {
+    //check id
+    if (mongoose.isValidObjectId(_id)) {
+      //detele
+      return this.bibleVersionModule.deleteOne({ _id })
+    }
+    else {
+      throw new BadRequestException("id không đúng định dạng mongodb")
+    }
   }
 }

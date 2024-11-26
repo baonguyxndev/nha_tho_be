@@ -1,10 +1,10 @@
 import { CreateMinistryYearDto } from '@/modules/ministry-year/dto/create-ministry-year.dto';
 import { UpdateMinistryYearDto } from '@/modules/ministry-year/dto/update-ministry-year.dto';
 import { MinistryYear } from '@/modules/ministry-year/schema/ministry-year.schema';
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import aqp from 'api-query-params';
-import { Model } from 'mongoose';
+import mongoose, { Model } from 'mongoose';
 
 @Injectable()
 export class MinistryYearsService {
@@ -50,12 +50,19 @@ export class MinistryYearsService {
   findOne(id: number) {
     return `This action returns a #${id} ministryYear`;
   }
-
-  update(id: number, updateMinistryYearDto: UpdateMinistryYearDto) {
-    return `This action updates a #${id} ministryYear`;
+  async update(updateMinistryYearDto: UpdateMinistryYearDto) {
+    return await this.ministryYearsModule.updateOne(
+      { _id: updateMinistryYearDto._id }, { ...updateMinistryYearDto });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} ministryYear`;
+  async remove(_id: string) {
+    //check id
+    if (mongoose.isValidObjectId(_id)) {
+      //detele
+      return this.ministryYearsModule.deleteOne({ _id })
+    }
+    else {
+      throw new BadRequestException("id không đúng định dạng mongodb")
+    }
   }
 }

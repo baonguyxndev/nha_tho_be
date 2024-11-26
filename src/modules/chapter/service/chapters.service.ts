@@ -1,8 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import aqp from 'api-query-params';
 import { Chapter } from '@/modules/chapter/schema/chapter.schema';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import mongoose, { Model } from 'mongoose';
 import { CreateChapterDto } from '../dto/create-chapter.dto';
 import { UpdateChapterDto } from '../dto/update-chapter.dto';
 
@@ -51,11 +51,19 @@ export class ChaptersService {
     return `This action returns a #${id} chapter`;
   }
 
-  update(id: number, updateChapterDto: UpdateChapterDto) {
-    return `This action updates a #${id} chapter`;
+  async update(updateChapterDto: UpdateChapterDto) {
+    return await this.chaptersModule.updateOne(
+      { _id: updateChapterDto._id }, { ...updateChapterDto });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} chapter`;
+  async remove(_id: string) {
+    //check id
+    if (mongoose.isValidObjectId(_id)) {
+      //detele
+      return this.chaptersModule.deleteOne({ _id })
+    }
+    else {
+      throw new BadRequestException("id không đúng định dạng mongodb")
+    }
   }
 }

@@ -26,12 +26,12 @@ export class ChaptersController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateChapterDto: UpdateChapterDto) {
-    return this.chaptersService.update(+id, updateChapterDto);
+  update(@Body() updateChapterDto: UpdateChapterDto) {
+    return this.chaptersService.update(updateChapterDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.chaptersService.remove(+id);
+    return this.chaptersService.remove(id);
   }
 }
