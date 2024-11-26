@@ -4,6 +4,7 @@ import { AuthService } from '../service/auth.service';
 import { Public, ResponseMessage } from '@/decorator/customize';
 import { CreateAuthDto } from '../dto/create-auth.dto';
 import { MailerService } from '@nestjs-modules/mailer';
+import { CodeAuthDto } from '../dto/code-auth-dto';
 
 
 @Controller('auth')
@@ -25,6 +26,12 @@ export class AuthController {
   @Public()
   register(@Body() registerDto: CreateAuthDto) {
     return this.authService.handleRegister(registerDto);
+  }
+
+  @Post('checkCode')
+  @Public()
+  checkCode(@Body() codeAuhtDto: CodeAuthDto) {
+    return this.authService.checkCode(codeAuhtDto);
   }
 
   @Get('mail')
