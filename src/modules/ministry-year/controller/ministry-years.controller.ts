@@ -25,13 +25,13 @@ export class MinistryYearsController {
     return this.ministryYearsService.findOne(+id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateMinistryYearDto: UpdateMinistryYearDto) {
-    return this.ministryYearsService.update(+id, updateMinistryYearDto);
+  @Patch()
+  update(@Body() updateMinistryYearDto: UpdateMinistryYearDto) {
+    return this.ministryYearsService.update(updateMinistryYearDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.ministryYearsService.remove(+id);
+    return this.ministryYearsService.remove(id);
   }
 }

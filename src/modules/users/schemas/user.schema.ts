@@ -26,7 +26,7 @@ export class User {
   @Prop()
   image: string;
 
-  @Prop({ default: 'USERS' })
+  @Prop({ default: 'NONE' })
   role: string;
 
   @Prop({ default: 'LOCAL' })

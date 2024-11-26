@@ -1,19 +1,19 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import aqp from 'api-query-params';
 import { InjectModel } from '@nestjs/mongoose';
 import { Verse } from '@/modules/verse/schema/verse.schema';
-import { Model } from 'mongoose';
+import mongoose, { Model } from 'mongoose';
 import { CreateVerseDto } from '../dto/create-verse.dto';
 import { UpdateVerseDto } from '../dto/update-verse.dto';
 
 @Injectable()
 export class VersesService {
-  constructor(@InjectModel(Verse.name) private ministryYearsModule: Model<Verse>) { }
+  constructor(@InjectModel(Verse.name) private verseModule: Model<Verse>) { }
 
   async create(createVerseDto: CreateVerseDto) {
     const { number, desc, chapterId } = createVerseDto;
 
-    const verse = await this.ministryYearsModule.create({
+    const verse = await this.verseModule.create({
       number, desc, chapterId
     })
     return {
@@ -34,11 +34,11 @@ export class VersesService {
     if (!pageSize)
       pageSize = 10;
 
-    const totalItems = (await this.ministryYearsModule.find(filter)).length;
+    const totalItems = (await this.verseModule.find(filter)).length;
     const totalPages = Math.ceil(totalItems / pageSize);
     const skip = (+current - 1) * (+pageSize);
 
-    const results = await this.ministryYearsModule
+    const results = await this.verseModule
       .find(filter)
       .limit(pageSize)
       .skip(skip)
@@ -51,11 +51,19 @@ export class VersesService {
     return `This action returns a #${id} verse`;
   }
 
-  update(id: number, updateVerseDto: UpdateVerseDto) {
-    return `This action updates a #${id} verse`;
+  async update(updateVerseDto: UpdateVerseDto) {
+    return await this.verseModule.updateOne(
+      { _id: updateVerseDto.id }, { ...updateVerseDto });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} verse`;
+  async remove(_id: string) {
+    //check id
+    if (mongoose.isValidObjectId(_id)) {
+      //detele
+      return this.verseModule.deleteOne({ _id })
+    }
+    else {
+      throw new BadRequestException("id không đúng định dạng mongodb")
+    }
   }
 }

@@ -17,4 +17,7 @@ export class UpdateUserDto {
 
     @IsOptional()
     image: string;
+
+    @IsOptional()
+    role: string;
 }

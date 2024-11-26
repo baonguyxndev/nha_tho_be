@@ -1,9 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateCategoryDto } from '../dto/create-category.dto';
 import { UpdateCategoryDto } from '../dto/update-category.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Category } from '@/modules/category/schema/category.schema';
-import { Model } from 'mongoose';
+import mongoose, { Model } from 'mongoose';
 import aqp from 'api-query-params';
 
 @Injectable()
@@ -51,11 +51,19 @@ export class CategoriesService {
     return `This action returns a #${id} category`;
   }
 
-  update(id: number, updateCategoryDto: UpdateCategoryDto) {
-    return `This action updates a #${id} category`;
+  async update(updateCategoryDto: UpdateCategoryDto) {
+    return await this.categoriesModule.updateOne(
+      { _id: updateCategoryDto._id }, { ...updateCategoryDto });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} category`;
+  async remove(_id: string) {
+    //check id
+    if (mongoose.isValidObjectId(_id)) {
+      //detele
+      return this.categoriesModule.deleteOne({ _id })
+    }
+    else {
+      throw new BadRequestException("id không đúng định dạng mongodb")
+    }
   }
 }

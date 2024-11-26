@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestj
 import { BibleVersionsService } from '@/modules/bible-version/service/bible-versions.service';
 import { CreateBibleVersionDto } from '../dto/create-bible-version.dto';
 import { UpdateBibleVersionDto } from '../dto/update-bible-version.dto';
+import { Public } from '@/decorator/customize';
 
 @Controller('bible-versions')
 export class BibleVersionsController {
@@ -25,13 +26,13 @@ export class BibleVersionsController {
     return this.bibleVersionsService.findOne(+id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateBibleVersionDto: UpdateBibleVersionDto) {
-    return this.bibleVersionsService.update(+id, updateBibleVersionDto);
+  @Patch()
+  update(@Body() updateBibleVersionsDto: UpdateBibleVersionDto) {
+    return this.bibleVersionsService.update(updateBibleVersionsDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.bibleVersionsService.remove(+id);
+    return this.bibleVersionsService.remove(id);
   }
 }

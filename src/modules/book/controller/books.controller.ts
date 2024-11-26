@@ -2,6 +2,7 @@ import { BooksService } from '@/modules/book/service/books.service';
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { CreateBookDto } from '../dto/create-book.dto';
 import { UpdateBookDto } from '../dto/update-book.dto';
+import { Public } from '@/decorator/customize';
 
 
 @Controller('books')
@@ -14,6 +15,7 @@ export class BooksController {
   }
 
   @Get()
+  @Public()
   async findAll(@Query() query: string,
     @Query("current") current: string,
     @Query("pageSize") pageSize: string
@@ -27,12 +29,12 @@ export class BooksController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateBookDto: UpdateBookDto) {
-    return this.booksService.update(+id, updateBookDto);
+  update(@Body() updateBookDto: UpdateBookDto) {
+    return this.booksService.update(updateBookDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.booksService.remove(+id);
+    return this.booksService.remove(id);
   }
 }

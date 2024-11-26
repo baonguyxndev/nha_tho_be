@@ -24,6 +24,11 @@ export class AuthService {
     const payload = { email: user.email, sub: user._id };
     console.log('Payload for JWT:', payload); // Log để kiểm tra payload
     return {
+      user: {
+        email: user.email,
+        _id: user._id,
+        name: user.name
+      },
       access_token: this.jwtService.sign(payload),
     }
   }

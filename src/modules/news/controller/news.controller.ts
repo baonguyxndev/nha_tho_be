@@ -26,12 +26,12 @@ export class NewsController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateNewsDto: UpdateNewsDto) {
-    return this.newsService.update(+id, updateNewsDto);
+  update(@Body() updateNewDto: UpdateNewsDto) {
+    return this.newsService.update(updateNewDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.newsService.remove(+id);
+    return this.newsService.remove(id);
   }
 }

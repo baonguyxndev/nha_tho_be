@@ -1,4 +1,16 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateMinistryYearDto } from './create-ministry-year.dto';
+import { IsMongoId, IsNotEmpty, IsOptional } from 'class-validator';
 
-export class UpdateMinistryYearDto extends PartialType(CreateMinistryYearDto) {}
+export class UpdateMinistryYearDto {
+    @IsMongoId({ message: 'id không hợp lệ' })
+    @IsNotEmpty({ message: 'id không được để trống!!!' })
+    _id: string;
+
+    @IsOptional()
+    name: string;
+
+    @IsOptional()
+    desc: string;
+
+    @IsOptional()
+    cateId: string;
+}

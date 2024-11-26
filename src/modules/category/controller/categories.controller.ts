@@ -26,12 +26,12 @@ export class CategoriesController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCategoryDto: UpdateCategoryDto) {
-    return this.categoriesService.update(+id, updateCategoryDto);
+  update(@Body() updateCategoryDto: UpdateCategoryDto) {
+    return this.categoriesService.update(updateCategoryDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.categoriesService.remove(+id);
+    return this.categoriesService.remove(id);
   }
 }
