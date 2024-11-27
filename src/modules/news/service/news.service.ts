@@ -44,7 +44,15 @@ export class NewsService {
       .skip(skip)
       .sort(sort as any);
 
-    return { results, totalPages };
+    return {
+      meta: {
+        current: current, // trang hiện tại 
+        pageSize: pageSize, // số lượng phần tử đã lấy
+        pages: totalPages, // tổng số lượng trang với điều kiện query
+        total: totalItems // tổng số phần tử 
+      },
+      results // kết quả query
+    };
   }
 
   findOne(id: number) {
