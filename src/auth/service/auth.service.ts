@@ -20,7 +20,7 @@ export class AuthService {
       return null;
     const isValidPassword = await comparePasswordHelper(password, user.password);
     if (!isValidPassword)
-      return null;
+      return null;``
     return user;
   }
 
