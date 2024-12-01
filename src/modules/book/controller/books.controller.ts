@@ -28,7 +28,7 @@ export class BooksController {
     return this.booksService.findOne(+id);
   }
 
-  @Patch(':id')
+  @Patch()
   update(@Body() updateBookDto: UpdateBookDto) {
     return this.booksService.update(updateBookDto);
   }

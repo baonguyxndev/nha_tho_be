@@ -14,11 +14,12 @@ export class UpdateNewsDto {
     desc: string;
 
     @IsOptional()
+    @IsMongoId({ message: 'Năm mục vụ không tồn tại' })
     ministryYearId: string;
 
     @IsOptional()
+    @IsMongoId({ message: 'Danh mục không tồn tại' })
     cateId: string;
 
-    @IsOptional()
-    mainImg: string;
+    mainImg?: string;
 }

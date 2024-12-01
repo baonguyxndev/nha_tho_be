@@ -9,5 +9,6 @@ export class UpdateBookDto {
     name: string;
 
     @IsOptional()
-    bibleVerionId: string;
+    @IsMongoId({ message: 'Phiên bản Kinh Thánh không tồn tại' })
+    bibleVersionId: string;
 }

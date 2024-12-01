@@ -1,14 +1,13 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateVerseDto } from './create-verse.dto';
 import { IsMongoId, IsNotEmpty, IsOptional } from 'class-validator';
 
 export class UpdateVerseDto {
 
     @IsMongoId({ message: 'id không hợp lệ' })
     @IsNotEmpty({ message: 'id không được để trống!!!' })
-    id: string;
+    _id: string;
 
     @IsOptional()
+    @IsMongoId({ message: 'Chương không tồn tại' })
     chapterId: string;
 
     @IsOptional()

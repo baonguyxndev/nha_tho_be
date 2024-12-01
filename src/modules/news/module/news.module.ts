@@ -1,3 +1,4 @@
+import { CloudinaryProvider } from '@/cloudinary/cloudinary.config';
 import { NewsController } from '@/modules/news/controller/news.controller';
 import { News, NewsSchema } from '@/modules/news/schema/news.schema';
 import { NewsService } from '@/modules/news/service/news.service';
@@ -8,6 +9,6 @@ import { MongooseModule } from '@nestjs/mongoose';
 @Module({
   imports: [MongooseModule.forFeature([{ name: News.name, schema: NewsSchema }])],
   controllers: [NewsController],
-  providers: [NewsService],
+  providers: [NewsService, CloudinaryProvider]
 })
 export class NewsModule { }

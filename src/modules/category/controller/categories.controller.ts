@@ -25,7 +25,7 @@ export class CategoriesController {
     return this.categoriesService.findOne(+id);
   }
 
-  @Patch(':id')
+  @Patch()
   update(@Body() updateCategoryDto: UpdateCategoryDto) {
     return this.categoriesService.update(updateCategoryDto);
   }

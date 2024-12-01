@@ -17,8 +17,7 @@ import { UsersModule } from '@/modules/users/module/users.module';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { TransformInterceptor } from '@/core/transform.interceptor';
-
-
+import { MulterModule } from '@nestjs/platform-express'; // Import MulterModule
 
 @Module({
   imports: [
@@ -26,30 +25,26 @@ import { TransformInterceptor } from '@/core/transform.interceptor';
     UsersModule,
     BibleVersionsModule,
     BooksModule,
-    CategoriesModule,
     ChaptersModule,
     MinistryYearsModule,
     NewsModule,
     VersesModule,
     AuthModule,
     ConfigModule.forRoot({ isGlobal: true }),
-    //mongo
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configServer: ConfigService) => ({
         uri: configServer.get<string>('MONGODB_URI'),
       }),
-      inject: [ConfigService]
+      inject: [ConfigService],
     }),
-    //mailer
     MailerModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
         transport: {
           host: 'smtp.gmail.com',
-          port: 465, // 465 SSL(Bảo mật)/secure: true hoặc 587 TLS(Không bảo mật)/secure: false
+          port: 465,
           secure: true,
-          // ignoreTLS: true,
           auth: {
             user: configService.get<string>('MAIL_USER'),
             pass: configService.get<string>('MAIL_PASSWORD'),
@@ -58,7 +53,6 @@ import { TransformInterceptor } from '@/core/transform.interceptor';
         defaults: {
           from: '"Giáo Xứ Tân Trang" <no-reply@giaoxutantrang@gmail.com>',
         },
-        // preview: true,
         template: {
           dir: process.cwd() + '/src/mail/templates/',
           adapter: new HandlebarsAdapter(),
@@ -69,6 +63,7 @@ import { TransformInterceptor } from '@/core/transform.interceptor';
       }),
       inject: [ConfigService],
     }),
+    MulterModule.register({ dest: './uploads' }),
   ],
   controllers: [AppController],
   providers: [

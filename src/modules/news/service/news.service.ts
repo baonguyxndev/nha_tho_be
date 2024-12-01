@@ -12,13 +12,13 @@ export class NewsService {
 
   async create(createNewsDto: CreateNewsDto) {
     const { title, desc, ministryYearId, cateId, mainImg } = createNewsDto;
-
     const news = await this.newsModule.create({
       title, desc, ministryYearId, cateId, mainImg
     })
     return {
-      _id: news._id
-    }
+      _id: news._id,
+      mainImg: news.mainImg, // Trả về URL ảnh đã upload
+    };
   }
 
   async findAll(query: string, current: number, pageSize: number) {
@@ -60,8 +60,20 @@ export class NewsService {
   }
 
   async update(updateNewsDto: UpdateNewsDto) {
+    // Lấy ID từ updateNewsDto
+    const { _id, ...updateData } = updateNewsDto;
+
+    // Kiểm tra xem tin tức có tồn tại trong DB không
+    const news = await this.newsModule.findById(_id);
+    if (!news) {
+      throw new BadRequestException('Tin tức không tồn tại');
+    }
+
+    // Cập nhật các trường dữ liệu
     return await this.newsModule.updateOne(
-      { _id: updateNewsDto._id }, { ...updateNewsDto });
+      { _id },
+      { ...updateData }, // Cập nhật với các trường trong updateNewsDto
+    );
   }
 
   async remove(_id: string) {
