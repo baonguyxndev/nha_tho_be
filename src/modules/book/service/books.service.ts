@@ -12,10 +12,10 @@ export class BooksService {
   constructor(@InjectModel(Book.name) private bookModule: Model<Book>) { }
 
   async create(createBookDto: CreateBookDto) {
-    const { name, bibleVerionId } = createBookDto;
+    const { name, bibleVersionId } = createBookDto;
 
     const book = await this.bookModule.create({
-      name, bibleVerionId
+      name, bibleVersionId
     })
     return {
       _id: book._id

@@ -1,5 +1,3 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateChapterDto } from './create-chapter.dto';
 import { IsMongoId, IsNotEmpty, IsOptional } from 'class-validator';
 
 export class UpdateChapterDto {
@@ -11,5 +9,6 @@ export class UpdateChapterDto {
     number: string;
 
     @IsOptional()
+    @IsMongoId({ message: 'Sách không tồn tại' })
     bookId: string;
 }

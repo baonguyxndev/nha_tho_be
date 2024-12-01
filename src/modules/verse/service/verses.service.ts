@@ -61,7 +61,7 @@ export class VersesService {
 
   async update(updateVerseDto: UpdateVerseDto) {
     return await this.verseModule.updateOne(
-      { _id: updateVerseDto.id }, { ...updateVerseDto });
+      { _id: updateVerseDto._id }, { ...updateVerseDto });
   }
 
   async remove(_id: string) {

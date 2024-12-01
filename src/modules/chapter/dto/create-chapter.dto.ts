@@ -1,11 +1,11 @@
-import { IsNotEmpty, IsEmail } from "class-validator";
+import { IsNotEmpty, IsEmail, IsMongoId } from "class-validator";
 
 export class CreateChapterDto {
 
     @IsNotEmpty({ message: 'Vui lòng nhập chương' })
     number: string;
 
-    @IsNotEmpty({ message: 'Vui lòng chọn sách' })
+    @IsMongoId({ message: 'Sách không tồn tại' })
     bookId: string;
 
 }

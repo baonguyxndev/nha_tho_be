@@ -9,7 +9,7 @@ export class Book {
     @Prop()
     id: string;
 
-    @Prop({ default: "NULL" })
+    @Prop()
     bibleVersionId: string
 
     @Prop()

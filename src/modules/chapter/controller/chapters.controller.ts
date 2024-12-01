@@ -25,7 +25,7 @@ export class ChaptersController {
     return this.chaptersService.findOne(+id);
   }
 
-  @Patch(':id')
+  @Patch()
   update(@Body() updateChapterDto: UpdateChapterDto) {
     return this.chaptersService.update(updateChapterDto);
   }

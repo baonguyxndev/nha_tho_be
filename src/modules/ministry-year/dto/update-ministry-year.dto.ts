@@ -12,5 +12,6 @@ export class UpdateMinistryYearDto {
     desc: string;
 
     @IsOptional()
+    @IsMongoId({ message: 'Danh mục không tồn tại' })
     cateId: string;
 }
